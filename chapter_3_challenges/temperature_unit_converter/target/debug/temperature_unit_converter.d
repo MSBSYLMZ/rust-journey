@@ -1,0 +1,1 @@
+D:\Rust-Projects\rust-journey\chapter_3_challenges\temperature_unit_converter\target\debug\temperature_unit_converter.exe: D:\Rust-Projects\rust-journey\chapter_3_challenges\temperature_unit_converter\src\main.rs
