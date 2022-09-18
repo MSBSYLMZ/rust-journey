@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "ownership_and_borrowing"
+name = "shirt_giveaway"
 version = "0.1.0"
