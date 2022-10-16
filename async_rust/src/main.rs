@@ -65,6 +65,7 @@ impl<'a> Finder<'a> {
         } else {
             let starting_point = (starting_point.0, starting_point.1 + 1);
             if next_char == '+' {
+                println!();
                 self.follow_bottom(base, starting_point);
             }
             self.follow_right(base, starting_point);
@@ -106,15 +107,19 @@ impl<'a> Finder<'a> {
 
     fn follow_left(&mut self, base: (usize, usize), starting_point: (usize, usize)) {
         println!("left   starting point: {} {} {}      | count: {}      |  base: {} {}", self.lines.get(starting_point.0).unwrap().as_bytes().get(starting_point.1).unwrap().to_owned() as char, starting_point.0, starting_point.1, self.count, base.0, base.1);
-        let y_axis = self.lines.get(starting_point.0 + 1);
+
+        let y_axis = self.lines.get(starting_point.0);
         let is_next_x_exists: bool = if let Some(V) = y_axis {
-            V.as_bytes().get(starting_point.1).is_some()
+            if starting_point.1 as i32 - 1 < 0  {
+                false
+            } else {
+                V.as_bytes().get(starting_point.1 - 1).is_some()
+            }
         } else {
             false
         };
 
-        if starting_point.1 as i32 - 1 < 0 || !is_next_x_exists {
-            
+        if !is_next_x_exists {
             self.follow_right((base.0, base.1 + 1), (base.0, base.1 + 1));
         } else {
             let next_char = self.lines[starting_point.0].as_bytes()[starting_point.1 - 1] as char;
@@ -137,6 +142,10 @@ impl<'a> Finder<'a> {
     fn follow_top(&mut self, base: (usize, usize), starting_point: (usize, usize)) {
         self.counter_count += 1;
         println!("top    starting point: {} {} {}      | count: {}      |  base: {} {}", self.lines.get(starting_point.0).unwrap().as_bytes().get(starting_point.1).unwrap().to_owned() as char, starting_point.0, starting_point.1, self.count, base.0, base.1);
+        if starting_point.0 as i32 - 1 < 0 {
+            self.follow_right((base.0, base.1 + 1), (base.0, base.1 + 1));
+            return
+        }
         let y_axis = self.lines.get(starting_point.0 - 1);
         let is_next_x_exists: bool = if let Some(V) = y_axis {
             V.as_bytes().get(starting_point.1).is_some()
@@ -144,11 +153,9 @@ impl<'a> Finder<'a> {
             false
         };
 
-        if starting_point.0 as i32 - 1 < 0 || !is_next_x_exists {
-            println!("Here");
+        if  !is_next_x_exists {
             self.follow_right((base.0, base.1 + 1), (base.0, base.1 + 1));
         } else {
-            println!("Hebele");
             let next_char = self.lines[starting_point.0 - 1].as_bytes()[starting_point.1] as char;
             if next_char != '+' && next_char != '|' {
                 if self.counter_count < 2 {
@@ -158,9 +165,7 @@ impl<'a> Finder<'a> {
                 self.counter_count -= 1;
                 return;
             } else {
-                println!("Yok");
                 if next_char == '+' {
-                    println!("Ammına");
                     if (starting_point.0 - 1, starting_point.1) == base {
                         self.count += 1;
                         return;
